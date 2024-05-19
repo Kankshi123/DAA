@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct Activity {
+    int index;
+    int start;
+    int finish;
+};
+bool compare(Activity a, Activity b) {
+    return a.finish < b.finish;
+}
+pair<int, vector<int>> maxNonConflictingActivities(int N, vector<int>& startTimes, vector<int>& finishTimes) {
+    vector<Activity> activities(N);
+    for (int i = 0; i < N; ++i) {
+        activities[i] = {i, startTimes[i], finishTimes[i]};
+    }
+    sort(activities.begin(), activities.end(), compare);
+    int count = 0;
+    vector<int> selectedActivities;
+    int lastFinish = -1;
+    for (const auto& activity : activities) {
+        if (activity.start >= lastFinish) {
+            selectedActivities.push_back(activity.index + 1); 
+            lastFinish = activity.finish;
+            count++;
+        }
+    }
+    return {count, selectedActivities};
+}
+int main() {
+    int N;
+    cin >> N;
+    vector<int> startTimes(N);
+    vector<int> finishTimes(N);
+    for (int i = 0; i < N; ++i) {
+        cin >> startTimes[i];
+    }
+    for (int i = 0; i < N; ++i) {
+        cin >> finishTimes[i];
+    }
+    pair<int, vector<int>> result = maxNonConflictingActivities(N, startTimes, finishTimes);
+    cout << "Maximum number of non-conflicting activities: " << result.first << endl;
+    cout << "Selected activities: ";
+    for (int activity : result.second) {
+        cout << activity << " ";
+    }
+    cout << endl;
+    return 0;
+}
