@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+bool findMajority(const vector<int>& arr) {
+  int n = arr.size();
+  int count = 0;
+  int majorityElement;
+  for (int num : arr) {
+    if (count == 0) {
+      majorityElement = num;
+    }
+    count += (num == majorityElement) ? 1 : -1;
+  }
+  count = 0;
+  for (int num : arr) {
+    if (num == majorityElement) {
+      count++;
+    }
+  }
+  return count > n / 2;
+}
+int findMedian(const vector<int>& arr) {
+  int n = arr.size();
+  vector<int> sortedArr(arr);
+  sort(sortedArr.begin(), sortedArr.end());
+  if (n % 2 == 0) {
+    return (sortedArr[n / 2 - 1] + sortedArr[n / 2]) / 2;
+  }
+  return sortedArr[n / 2];
+}
+int main() {
+  int n;
+  cin >> n;
+  vector<int> arr(n);
+  for (int i = 0; i < n; i++) {
+    cin >> arr[i];
+  }
+  if (findMajority(arr)) {
+    cout << "yes" << endl;
+  } else {
+    cout << "no" << endl;
+  }
+  cout << "Median: " << findMedian(arr) << endl;
+  return 0;
+}
